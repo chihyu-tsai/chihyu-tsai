@@ -1,4 +1,4 @@
-## Hello, I'm Chih Yu 👋
+## Hello, I'm Chih Yu 🧋
 
 <!--
 **chihyu-tsai/chihyu-tsai** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
