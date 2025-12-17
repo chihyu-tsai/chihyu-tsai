@@ -1,10 +1,12 @@
-## Hi there 👋
+## Hello, I'm Chih Yu 👋
 
 <!--
 **chihyu-tsai/chihyu-tsai** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
+Im currently
 Here are some ideas to get you started:
 
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=chihyu-tsai)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=chihyu-tsai)](https://github.com/anuraghazra/github-readme-stats)
 - 🔭 I’m currently working on ...
 - 🌱 I’m currently learning ...
 - 👯 I’m looking to collaborate on ...
@@ -14,3 +16,7 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+📚 I'm currently a second year MCIT student at the [University of Pennsylavania](https://www.upenn.edu/)<br/>
+Currently I'm taking CIS 5190 - [Applied Machine Learning](https://www.seas.upenn.edu/~cis5190/fall2025/index.html) and CIS 5300 - [Natural Language Processing](https://www.cis.upenn.edu/~myatskar/teaching/cis5300_fa25/)
+
