@@ -18,5 +18,5 @@ Here are some ideas to get you started:
 -->
 
 📚 I'm currently a second year MCIT student at the [University of Pennsylavania](https://www.upenn.edu/)<br/>
-Currently I'm taking CIS 5190 - [Applied Machine Learning](https://www.seas.upenn.edu/~cis5190/fall2025/index.html) and CIS 5300 - [Natural Language Processing](https://www.cis.upenn.edu/~myatskar/teaching/cis5300_fa25/)
+Currently I'm taking CIT 5950 - [Computer Systems Programming](https://www.seas.upenn.edu/~cit5950/current/) and CIS 5450 - Big Data Analytics
 
