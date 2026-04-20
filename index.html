@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chihyu Tsai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --bg:        #fdf6ee;
+      --surface:   #faecd8;
+      --border:    #ecd9be;
+      --text:      #2e1c0e;
+      --muted:     #9a7358;
+      --accent:    #c8521a;
+      --accent-hl: #a83e0e;
+      --toggle-bg: #ecd9be;
+      --shadow:    rgba(120, 70, 20, 0.10);
+      --radius:    0.65rem;
+      --transition: 0.25s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg:        #1c1209;
+      --surface:   #26180a;
+      --border:    #3a2410;
+      --text:      #f5e6d3;
+      --muted:     #a07a58;
+      --accent:    #e8873a;
+      --accent-hl: #f59b50;
+      --toggle-bg: #3a2410;
+      --shadow:    rgba(0, 0, 0, 0.35);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, .nav-brand {
+      font-family: "Lora", Georgia, serif;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hl); text-decoration: underline; }
+
+    /* ── Layout ── */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Header / Nav ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-brand {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color var(--transition);
+      letter-spacing: 0.01em;
+    }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      background: var(--toggle-bg);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      width: 44px;
+      height: 24px;
+      position: relative;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--bg);
+      transition: transform var(--transition);
+      box-shadow: 0 1px 4px rgba(120,70,20,0.25);
+    }
+
+    [data-theme="dark"] .theme-toggle::after {
+      transform: translateX(20px);
+      background: #fdf6ee;
+    }
+
+    [data-theme="dark"] .theme-toggle {
+      background: var(--accent);
+    }
+
+    .theme-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .theme-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      user-select: none;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+
+    .hero-avatar {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8873a, #c8521a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-family: "Lora", Georgia, serif;
+      margin: 0 auto 1.75rem;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(200, 82, 26, 0.30);
+      letter-spacing: 0.03em;
+    }
+
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+    .hero .tagline {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      margin-bottom: 1.75rem;
+      font-style: italic;
+      font-family: "Lora", Georgia, serif;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.4rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: "DM Sans", sans-serif;
+      cursor: pointer;
+      transition: opacity var(--transition), background var(--transition), box-shadow var(--transition);
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(200, 82, 26, 0.30);
+    }
+    .btn-primary:hover { opacity: 0.88; text-decoration: none; color: #fff; }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover { background: var(--surface); text-decoration: none; color: var(--text); }
+
+    .btn-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Section ── */
+    section { padding: 3.5rem 0; border-top: 1px solid var(--border); }
+    section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Cards ── */
+    .card-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      transition: background var(--transition), border-color var(--transition), transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      font-family: "Lora", Georgia, serif;
+    }
+    .card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+    }
+
+    .timeline-date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 0.2rem;
+      font-style: italic;
+      font-family: "Lora", Georgia, serif;
+    }
+    .timeline-body h3 { font-size: 0.95rem; font-weight: 600; }
+    .timeline-body p  { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+
+    /* ── Contact ── */
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      list-style: none;
+    }
+
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.9rem;
+    }
+
+    .contact-list .icon { font-size: 1rem; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: border-color var(--transition);
+      font-style: italic;
+      font-family: "Lora", Georgia, serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <header>
+    <nav class="container">
+      <a class="nav-brand" href="#">CT</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="theme-toggle-wrap">
+        <span class="theme-label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── Hero ── -->
+  <main>
+    <section class="hero container" id="about">
+      <div class="hero-avatar">CT</div>
+      <h1>Chihyu Tsai</h1>
+      <p class="tagline">Software Engineer &middot; Builder &middot; Problem Solver</p>
+      <div class="badge-row">
+        <span class="badge">TypeScript</span>
+        <span class="badge">React</span>
+        <span class="badge">Python</span>
+        <span class="badge">Node.js</span>
+        <span class="badge">AWS</span>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#projects">View Projects</a>
+        <a class="btn btn-outline" href="#contact">Get in Touch</a>
+      </div>
+    </section>
+
+    <!-- ── Projects ── -->
+    <section class="container" id="projects">
+      <h2>Projects</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Project Alpha</h3>
+          <p>A short description of what this project does and the problem it solves.</p>
+        </div>
+        <div class="card">
+          <h3>Project Beta</h3>
+          <p>A short description of what this project does and the problem it solves.</p>
+        </div>
+        <div class="card">
+          <h3>Project Gamma</h3>
+          <p>A short description of what this project does and the problem it solves.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Experience ── -->
+    <section class="container" id="experience">
+      <h2>Experience</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-date">2023 – Present</span>
+          <div class="timeline-body">
+            <h3>Senior Software Engineer &middot; Company Name</h3>
+            <p>Brief description of your role and key contributions.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-date">2021 – 2023</span>
+          <div class="timeline-body">
+            <h3>Software Engineer &middot; Previous Company</h3>
+            <p>Brief description of your role and key contributions.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-date">2019 – 2021</span>
+          <div class="timeline-body">
+            <h3>Junior Engineer &middot; First Company</h3>
+            <p>Brief description of your role and key contributions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ── -->
+    <section class="container" id="contact">
+      <h2>Contact</h2>
+      <ul class="contact-list">
+        <li><span class="icon">✉️</span><a href="mailto:hello@example.com">hello@example.com</a></li>
+        <li><span class="icon">💼</span><a href="https://linkedin.com/in/yourhandle" target="_blank">linkedin.com/in/yourhandle</a></li>
+        <li><span class="icon">🐙</span><a href="https://github.com/yourhandle" target="_blank">github.com/yourhandle</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      &copy; <span id="year"></span> Chihyu Tsai &middot; Built with HTML, CSS &amp; JS
+    </div>
+  </footer>
+
+  <script>
+    // ── Theme toggle ──
+    const html   = document.documentElement;
+    const btn    = document.getElementById("theme-toggle");
+    const label  = document.getElementById("theme-label");
+
+    const saved = localStorage.getItem("theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+    setTheme(saved);
+
+    btn.addEventListener("click", () => {
+      setTheme(html.dataset.theme === "dark" ? "light" : "dark");
+    });
+
+    function setTheme(t) {
+      html.dataset.theme = t;
+      label.textContent  = t === "dark" ? "Dark" : "Light";
+      localStorage.setItem("theme", t);
+    }
+
+    // ── Footer year ──
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
