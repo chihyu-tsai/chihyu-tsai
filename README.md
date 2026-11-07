@@ -96,17 +96,17 @@ This backend is **not deployed** by these changes. Deploy it to a Node-capable h
 
 ### GitHub Actions → Render CI/CD (prepared, not activated)
 
-The repository includes `.github/workflows/deploy.yml` and an optional `render.yaml` Blueprint. **No cloud resources have been created, no commit has been pushed, and no deployment is live from these changes.** Render's Starter service and persistent disk are paid resources; review pricing before approving the Blueprint.
+The repository includes `.github/workflows/deploy.yml` and an optional `render.yaml` Blueprint. **Pushes save code and run tests only; they do not request deployment.** No cloud resources have been created or deployment activated by this work. Render's Starter service and persistent disk are paid resources; review pricing before approving the Blueprint.
 
 1. Commit/push the site to the GitHub repository when ready. Pull requests and pushes to `main` run tests on Node 20 and 22 and check JavaScript syntax.
 2. In Render, create a **Blueprint** from this repository and review/approve `render.yaml`. It configures a single Node service, persistent disk at `/var/data`, a generated `COFFEE_ADMIN_TOKEN`, and `/api/health` health checks. The initial service creation may deploy once; subsequent automatic Render Git deployments are disabled so GitHub CI controls deployments.
 3. Copy the generated editor key from Render's private environment settings to your password manager. Use it only in the hosted `/coffee-admin.html` page. Never put it in GitHub source or this chat.
 4. From the Render service's Settings, copy its **Deploy Hook URL**. Add it to GitHub → Settings → Secrets and variables → Actions as the repository secret `RENDER_DEPLOY_HOOK_URL`.
-5. Push a code change to `main` (or manually run the workflow on `main`). Only after both test jobs pass, GitHub requests deployment of that **exact tested commit SHA**. Configure branch protection to require CI before merging. Add approvals to the GitHub `production` environment if desired.
+5. Only when you explicitly want to deploy, manually run the workflow on `main` and check its **deploy** input (off by default). Ordinary pushes, pull requests and manual runs without that option run tests only. With deployment explicitly enabled, only after both test jobs pass does GitHub request deployment of that **exact tested commit SHA**. Configure branch protection to require CI before merging. Add approvals to the GitHub `production` environment if desired.
 6. The workflow reports whether Render accepted the asynchronous deploy request. Check Render for final deploy completion and health; acceptance is not proof the new version is live. If the secret is unset, CI still runs and explicitly reports deployment skipped.
 7. Open the Render site URL and bookmark `/coffee-admin.html`. **All future café data edits happen there**, not in GitHub or the Render console. The mounted data file survives code redeployments; back it up separately from the repository.
 
-Workflow: `code push → tests → deploy request → Render health check`. Content workflow: `Coffee Editor → persistent data → live visitor update`. These are intentionally separate pipelines. For another hosting provider, replace only the deployment step; the editor/API can stay unchanged.
+Save workflow: `code push → tests only`. Optional deployment: `explicit manual deploy → tests → deploy request → Render health check`. Content workflow: `Coffee Editor → persistent data → live visitor update`. These are intentionally separate pipelines. For another hosting provider, replace only the deployment step; the editor/API can stay unchanged.
 
 ### Project structure
 

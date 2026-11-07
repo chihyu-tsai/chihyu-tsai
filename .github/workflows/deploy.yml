@@ -6,6 +6,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to Render after tests pass (leave off for tests only)"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -34,7 +40,8 @@ jobs:
 
   deploy:
     needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    # Saving code to GitHub must never request a deployment automatically.
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy == true && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
     steps:
