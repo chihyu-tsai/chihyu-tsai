@@ -1,0 +1,25 @@
+# Optional deployment blueprint. Creating this service/disk incurs Render charges.
+# Nothing is provisioned until you explicitly create/approve a Render Blueprint.
+services:
+  - type: web
+    name: chih-yu-tsai-website
+    runtime: node
+    plan: starter
+    branch: main
+    autoDeployTrigger: "off"
+    buildCommand: node --check server.mjs
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: HOST
+        value: 0.0.0.0
+      - key: COFFEE_ADMIN_TOKEN
+        generateValue: true
+      - key: COFFEE_DATA_FILE
+        value: /var/data/coffees.json
+    disk:
+      name: coffee-journal-data
+      mountPath: /var/data
+      sizeGB: 1

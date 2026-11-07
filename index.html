@@ -1,38 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light" data-design="v3">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chihyu Tsai</title>
+  <title>Chih Yu Tsai · V3</title>
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css" integrity="sha384-gNYNsUmuZqDYiT3gbirWTV5K7rt71RoveS/yXAaU09d4ZUmeDVTD3XoqB6uJAIFR" crossorigin="" />
+  <link rel="stylesheet" href="assets/coffee.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&text=%E8%94%A1%E6%99%BA%E5%AE%87&display=swap" rel="stylesheet" />
   <style>
     /* ── Tokens ── */
     :root {
-      --bg:        #fdf6ee;
-      --surface:   #faecd8;
-      --border:    #ecd9be;
-      --text:      #2e1c0e;
-      --muted:     #9a7358;
+      color-scheme: light;
+      --bg:        #eae7e1;
+      --surface:   #f1eee8;
+      --border:    #d4cec5;
+      --text:      #353330;
+      --muted:     #6e6861;
       --accent:    #c8521a;
       --accent-hl: #a83e0e;
-      --toggle-bg: #ecd9be;
+      --toggle-bg: #ded9d1;
       --shadow:    rgba(120, 70, 20, 0.10);
       --radius:    0.65rem;
       --transition: 0.25s ease;
     }
 
     [data-theme="dark"] {
-      --bg:        #1c1209;
-      --surface:   #26180a;
-      --border:    #3a2410;
-      --text:      #f5e6d3;
-      --muted:     #a07a58;
+      color-scheme: dark;
+      --bg:        #2d3035;
+      --surface:   #363a40;
+      --border:    #4b5058;
+      --text:      #eeece7;
+      --muted:     #b6b3ad;
       --accent:    #e8873a;
       --accent-hl: #f59b50;
-      --toggle-bg: #3a2410;
-      --shadow:    rgba(0, 0, 0, 0.35);
+      --toggle-bg: #40454d;
+      --shadow:    rgba(0, 0, 0, 0.18);
     }
 
     /* ── Reset ── */
@@ -49,7 +57,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    h1, h2, h3, .nav-brand {
+    h1, h2, h3 {
       font-family: "Lora", Georgia, serif;
     }
 
@@ -57,7 +65,8 @@
     a:hover { color: var(--accent-hl); text-decoration: underline; }
 
     /* ── Layout ── */
-    .container { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; }
+    [hidden] { display: none !important; }
 
     /* ── Header / Nav ── */
     header {
@@ -73,15 +82,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 56px;
-    }
-
-    .nav-brand {
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.01em;
+      min-height: 76px;
+      gap: 1.5rem;
     }
 
     .nav-links {
@@ -99,75 +101,79 @@
       letter-spacing: 0.01em;
     }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-links a { display: block; padding: 0.65rem 0; border-bottom: 2px solid transparent; }
+    .nav-links a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 3px; }
 
     /* ── Theme toggle ── */
     .theme-toggle {
       background: var(--toggle-bg);
-      border: none;
-      border-radius: 999px;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 50%;
       cursor: pointer;
       width: 44px;
-      height: 24px;
-      position: relative;
-      transition: background var(--transition);
+      height: 44px;
+      display: grid;
+      place-items: center;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
       flex-shrink: 0;
     }
 
-    .theme-toggle::after {
-      content: "";
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--bg);
-      transition: transform var(--transition);
-      box-shadow: 0 1px 4px rgba(120,70,20,0.25);
+    .theme-toggle:hover { background: var(--surface); }
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
     }
 
-    [data-theme="dark"] .theme-toggle::after {
-      transform: translateX(20px);
-      background: #fdf6ee;
+    .theme-toggle svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    [data-theme="dark"] .theme-toggle {
-      background: var(--accent);
-    }
-
-    .theme-toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .theme-label {
-      font-size: 0.8rem;
-      color: var(--muted);
-      user-select: none;
-    }
+    .theme-toggle .icon-sun { display: none; }
+    [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+    [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 
     /* ── Hero ── */
     .hero {
-      padding: 5rem 0 3rem;
       text-align: center;
     }
 
     .hero-avatar {
-      width: 92px;
-      height: 92px;
+      width: 144px;
+      height: 144px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #e8873a, #c8521a);
+      background: var(--surface);
+      border: 2px dashed var(--border);
       display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
       align-items: center;
       justify-content: center;
-      font-size: 1.6rem;
-      font-family: "Lora", Georgia, serif;
+      overflow: hidden;
+      font-size: 0.8rem;
       margin: 0 auto 1.75rem;
-      color: #fff;
-      font-weight: 700;
-      box-shadow: 0 4px 20px rgba(200, 82, 26, 0.30);
-      letter-spacing: 0.03em;
+      color: var(--muted);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .hero-avatar svg { width: 40px; height: 40px; }
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .hero .chinese-name {
+      display: block;
+      font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      margin-top: 0.25rem;
+      color: var(--muted);
     }
 
     .hero h1 {
@@ -180,10 +186,17 @@
       color: var(--muted);
       font-size: 1rem;
       font-weight: 300;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1rem;
       font-style: italic;
       font-family: "Lora", Georgia, serif;
     }
+
+    .location { display: flex; align-items: center; justify-content: center; gap: 0.45rem; color: var(--muted); font-size: 0.9rem; }
+    .location svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+    .social-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0 2rem; }
+    .social-link { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--text); padding: 0.65rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
+    .social-link:hover { background: var(--bg); color: var(--text); text-decoration: none; }
+    .social-link svg, .contact-list svg { width: 21px; height: 21px; fill: currentColor; flex-shrink: 0; }
 
     .badge-row {
       display: flex;
@@ -237,16 +250,29 @@
     .btn-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
 
     /* ── Section ── */
-    section { padding: 3.5rem 0; border-top: 1px solid var(--border); }
+    section.container {
+      position: relative;
+      padding: 4.5rem 3rem;
+      margin: 2.5rem auto 4rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      box-shadow: 0 12px 36px var(--shadow);
+      transform-origin: left center;
+    }
+    .is-paged > section { min-height: 65vh; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
     section h2 {
-      font-size: 1.3rem;
+      font-size: 1.65rem;
       font-weight: 700;
-      margin-bottom: 1.75rem;
+      margin-bottom: 3rem;
       letter-spacing: -0.01em;
     }
 
     /* ── Cards ── */
-    .card-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .card-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 
     .card {
       background: var(--surface);
@@ -270,29 +296,84 @@
     .card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
 
     /* ── Timeline ── */
-    .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+    .timeline { list-style: none; }
 
     .timeline-item {
+      position: relative;
       display: grid;
-      grid-template-columns: 110px 1fr;
-      gap: 1rem;
+      grid-template-columns: 64px minmax(0, 1fr);
+      column-gap: 1.75rem;
+      padding-bottom: 3.5rem;
+    }
+
+    .timeline-item:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 31px;
+      top: 64px;
+      bottom: 0;
+      border-left: 1px solid var(--border);
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-logo {
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f5f3ef;
+    }
+
+    .timeline-logo img { width: 46px; height: 46px; object-fit: contain; }
+    .timeline-logo-wide img { width: 54px; }
+    .timeline-logo-initials {
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
     }
 
     .timeline-date {
+      display: block;
       font-size: 0.78rem;
       color: var(--muted);
-      padding-top: 0.2rem;
-      font-style: italic;
-      font-family: "Lora", Georgia, serif;
+      margin-top: 0.85rem;
+      font-variant-numeric: tabular-nums;
     }
-    .timeline-body h3 { font-size: 0.95rem; font-weight: 600; }
-    .timeline-body p  { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+    .timeline-body { padding-top: 0.1rem; }
+    .timeline-body h3 { font-family: "DM Sans", system-ui, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.5; }
+    .timeline-organization { font-size: 0.9rem; margin-top: 0.6rem; }
+    .timeline-organization a { color: var(--muted); }
+    .timeline-honor { font-size: 0.85rem; color: var(--muted); font-style: italic; margin-top: 0.45rem; }
+    section[id] { scroll-margin-top: 5rem; }
+
+    .logo-credits { margin-top: 0.75rem; font-family: "DM Sans", system-ui, sans-serif; font-style: normal; }
+    .logo-credits summary { cursor: pointer; }
+    .logo-credits p { margin: 0.5rem auto 0; max-width: 560px; }
+
+    @media (max-width: 560px) {
+      nav { min-height: 64px; gap: 0.75rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .nav-links { flex: 1; flex-wrap: wrap; justify-content: flex-start; column-gap: 0.85rem; row-gap: 0; }
+      .nav-links a { font-size: 0.75rem; }
+      section.container { padding: 2.75rem 1.5rem; margin: 1.5rem 1rem 2.5rem; }
+      section h2 { font-size: 1.4rem; margin-bottom: 2.5rem; }
+      .timeline-item { grid-template-columns: 52px minmax(0, 1fr); column-gap: 1rem; }
+      .timeline-logo { width: 52px; height: 52px; border-radius: 12px; }
+      .timeline-logo img { width: 38px; height: 38px; }
+      .timeline-logo-wide img { width: 44px; }
+      .timeline-item:not(:last-child)::before { left: 25px; top: 52px; }
+      section[id] { scroll-margin-top: 8rem; }
+    }
 
     /* ── Contact ── */
     .contact-list {
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 1.5rem;
       list-style: none;
     }
 
@@ -304,6 +385,7 @@
     }
 
     .contact-list .icon { font-size: 1rem; }
+    .contact-list a { overflow-wrap: anywhere; min-width: 0; }
 
     /* ── Footer ── */
     footer {
@@ -317,22 +399,42 @@
       font-family: "Lora", Georgia, serif;
     }
   </style>
+  <link rel="stylesheet" href="assets/v3.css" />
 </head>
 <body>
+  <!-- Shared social icons; hidden from assistive technology, with labels on each link. -->
+  <svg xmlns="http://www.w3.org/2000/svg" hidden aria-hidden="true">
+    <symbol id="icon-github" viewBox="0 0 24 24">
+      <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.4c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z" />
+    </symbol>
+    <symbol id="icon-linkedin" viewBox="0 0 24 24">
+      <path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.39-.74 1.36-1.52 2.79-1.52 2.98 0 3.58 1.96 3.58 4.51v5.26Z" />
+    </symbol>
+  </svg>
 
   <!-- ── Navigation ── -->
   <header>
-    <nav class="container">
-      <a class="nav-brand" href="#">CT</a>
+    <nav class="container" aria-label="Main navigation">
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#education">Education</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#coffee">Coffee</a></li>
+        <li><a href="#for-fun">For Fun</a></li>
       </ul>
-      <div class="theme-toggle-wrap">
-        <span class="theme-label" id="theme-label">Light</span>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
+      <div class="nav-tools">
+        <span class="version-current" aria-label="Current design: version 3">V3</span>
+        <button class="language-toggle" id="language-toggle" type="button" aria-label="切換至繁體中文" title="切換至繁體中文"><span lang="zh-Hant">繁</span><span class="language-divider" aria-hidden="true">/</span><span lang="en">EN</span></button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.9 13.1A9 9 0 0 1 10.9 3.1a9 9 0 1 0 10 10Z" />
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42m0-14.14-1.42 1.42m-11.3 11.3-1.42 1.42" />
+        </svg>
+        </button>
       </div>
     </nav>
   </header>
@@ -340,76 +442,210 @@
   <!-- ── Hero ── -->
   <main>
     <section class="hero container" id="about">
-      <div class="hero-avatar">CT</div>
-      <h1>Chihyu Tsai</h1>
-      <p class="tagline">Software Engineer &middot; Builder &middot; Problem Solver</p>
-      <div class="badge-row">
-        <span class="badge">TypeScript</span>
-        <span class="badge">React</span>
-        <span class="badge">Python</span>
-        <span class="badge">Node.js</span>
-        <span class="badge">AWS</span>
+      <div class="introduction">
+        <div class="intro-copy">
+          <p class="intro-kicker">Hello, I’m</p>
+          <h1>Chih Yu Tsai <span class="chinese-name" lang="zh-Hant">蔡智宇</span></h1>
+          <p class="tagline">Software, data, and the occasional coffee detour.</p>
+          <div class="intro-prose">
+            <p>I studied computer and information technology @ <a href="#education"><img class="inline-school-logo" src="assets/logos/penn.svg" alt="" width="18" height="18" />Penn</a>, after a B.A. in Economics @ <a href="#education"><img class="inline-school-logo logo-seal" src="assets/logos/berkeley.svg" alt="" width="18" height="18" />UC Berkeley</a><span data-zh="取得經濟學學士學位。">.</span></p>
+            <p>My work has taken me from health-economic modeling to <strong>research software and data pipelines</strong>. This is a small collection of the things I’ve worked on—and a few places I’ve stopped for coffee.</p>
+          </div>
+          <p class="location">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+            Philadelphia, PA
+          </p>
+          <div class="social-links" aria-label="Social profiles">
+            <a class="social-link" href="https://github.com/chihyu-tsai" target="_blank" rel="noopener noreferrer" aria-label="Chih Yu Tsai on GitHub (opens in a new tab)">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-github" /></svg>GitHub
+            </a>
+            <a class="social-link" href="https://linkedin.com/in/chihyutsai" target="_blank" rel="noopener noreferrer" aria-label="Chih Yu Tsai on LinkedIn (opens in a new tab)">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-linkedin" /></svg>LinkedIn
+            </a>
+            <a class="social-link email-address" href="mailto:chihyutsai@alumni.upenn.edu">chihyutsai AT alumni DOT upenn DOT edu</a>
+          </div>
+        </div>
+        <figure class="profile-note">
+          <img class="profile-portrait" src="assets/portraits/chih-yu-tsai.jpg" width="720" height="720" alt="Chih Yu Tsai holding a cup of coffee" fetchpriority="high" decoding="async" />
+        </figure>
       </div>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="#projects">View Projects</a>
-        <a class="btn btn-outline" href="#contact">Get in Touch</a>
+      <div class="intro-bottom">
+        <p>Recent projects in <code>C/C++</code>, <code>Java</code>, and <code>Python</code><span data-zh="的專案。">.</span></p>
+        <a href="#projects">Take a look at my work <span aria-hidden="true">↗</span></a>
       </div>
     </section>
 
     <!-- ── Projects ── -->
     <section class="container" id="projects">
-      <h2>Projects</h2>
+      <h2>Things I’ve built.</h2>
+      <p class="section-intro">A few things I’ve built and studied.</p>
       <div class="card-grid">
         <div class="card">
-          <h3>Project Alpha</h3>
-          <p>A short description of what this project does and the problem it solves.</p>
+          <h3>Multithreaded HTTP Search Server</h3>
+          <p>From sockets and HTTP parsing to an inverted index and ranked search results.</p>
+          <p class="project-meta">C++ / networking / concurrency</p>
         </div>
         <div class="card">
-          <h3>Project Beta</h3>
-          <p>A short description of what this project does and the problem it solves.</p>
+          <h3>Compiler Frontend &amp; Language Runtime</h3>
+          <p>A look at how a small language becomes executable, from tokenization to scoped execution.</p>
+          <p class="project-meta">Java / compilers / language design</p>
         </div>
         <div class="card">
-          <h3>Project Gamma</h3>
-          <p>A short description of what this project does and the problem it solves.</p>
+          <h3>LC4 Disassembler</h3>
+          <p>Reading binary object files and translating machine code back into LC4 assembly.</p>
+          <p class="project-meta">C / assembly / memory management</p>
+        </div>
+        <div class="card">
+          <h3>Retrieval-Augmented QA</h3>
+          <p>Chunking, reranking, and evaluating whether a question-answering system cites the right evidence.</p>
+          <p class="project-meta">retrieval / language models / evaluation</p>
         </div>
       </div>
+    </section>
+
+    <!-- ── Education ── -->
+    <section class="container" id="education">
+      <h2>Where I’ve studied.</h2>
+      <p class="section-intro">A path from economics → computer science.</p>
+      <ol class="timeline" aria-label="Education, most recent first">
+        <li class="timeline-item">
+          <div class="timeline-logo">
+            <img src="assets/logos/penn.svg" alt="" width="46" height="46" loading="lazy" />
+          </div>
+          <div class="timeline-body">
+            <h3>Master of Computer and Information Technology</h3>
+            <p class="timeline-organization"><a href="https://www.upenn.edu/">University of Pennsylvania</a></p>
+            <span class="timeline-date"><time datetime="2026-05">May 2026</time></span>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-logo">
+            <img class="logo-seal" src="assets/logos/berkeley.svg" alt="" width="46" height="46" loading="lazy" />
+          </div>
+          <div class="timeline-body">
+            <h3>B.A. in Economics</h3>
+            <p class="timeline-organization"><a href="https://www.berkeley.edu/">University of California, Berkeley</a></p>
+            <p class="timeline-honor">Highest Distinction in General Scholarship</p>
+            <span class="timeline-date"><time datetime="2022-05">May 2022</time></span>
+          </div>
+        </li>
+      </ol>
+      <figure class="education-journey" aria-labelledby="journey-title">
+        <h3 id="journey-title">A few places along the way.</h3>
+        <p class="journey-intro">Taiwan → California → Pennsylvania</p>
+        <div id="journey-map" class="journey-map" role="group" aria-label="Education journey map"></div>
+        <ol class="journey-stops" aria-label="Life stages, in chronological order">
+          <li><button type="button" data-journey-stop="kaohsiung" aria-pressed="true"><span class="journey-number">01</span><strong>Kaohsiung</strong><span>Born &amp; raised · Taiwan</span></button></li>
+          <li><button type="button" data-journey-stop="tainan" aria-pressed="false"><span class="journey-number">02</span><strong>Tainan</strong><span>High school · Taiwan</span></button></li>
+          <li><button type="button" data-journey-stop="bay-area" aria-pressed="false"><span class="journey-number">03</span><strong>Bay Area</strong><span>Undergraduate · California</span></button></li>
+          <li><button type="button" data-journey-stop="philadelphia" aria-pressed="false"><span class="journey-number">04</span><strong>Philadelphia</strong><span>Graduate · Pennsylvania</span></button></li>
+        </ol>
+        <p id="journey-description" class="journey-description" aria-live="polite">Born and raised in Kaohsiung, in southern Taiwan.</p>
+        <figcaption>Approximate city centers; curves show the sequence, not travel routes. Map data: <a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth</a> (public domain). <a href="assets/geography/SOURCE.txt">Source notes</a>.</figcaption>
+      </figure>
     </section>
 
     <!-- ── Experience ── -->
     <section class="container" id="experience">
-      <h2>Experience</h2>
-      <div class="timeline">
-        <div class="timeline-item">
-          <span class="timeline-date">2023 – Present</span>
-          <div class="timeline-body">
-            <h3>Senior Software Engineer &middot; Company Name</h3>
-            <p>Brief description of your role and key contributions.</p>
+      <h2>Research &amp; Industry Experience</h2>
+      <p class="section-intro">The places where I’ve worked on software, data, and decisions.</p>
+      <ol class="timeline" aria-label="Experience, most recent first">
+        <li class="timeline-item">
+          <div class="timeline-logo">
+            <img src="assets/logos/penn.svg" alt="" width="46" height="46" loading="lazy" />
           </div>
-        </div>
-        <div class="timeline-item">
-          <span class="timeline-date">2021 – 2023</span>
           <div class="timeline-body">
-            <h3>Software Engineer &middot; Previous Company</h3>
-            <p>Brief description of your role and key contributions.</p>
+            <h3>Research Assistant — Software Engineering &amp; Data Pipelines</h3>
+            <p class="timeline-organization"><a href="https://www.wharton.upenn.edu/">Wharton Causal Data Science Lab</a></p>
+            <span class="timeline-date"><time datetime="2025-10">Oct 2025</time> – <time datetime="2026-05">May 2026</time></span>
           </div>
-        </div>
-        <div class="timeline-item">
-          <span class="timeline-date">2019 – 2021</span>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-logo timeline-logo-wide">
+            <img class="logo-light" src="assets/logos/medical-decision-modeling-transparent.png" alt="" width="54" height="46" loading="lazy" />
+            <img class="logo-dark" src="assets/logos/medical-decision-modeling-dark.png" alt="" width="54" height="46" loading="lazy" />
+          </div>
           <div class="timeline-body">
-            <h3>Junior Engineer &middot; First Company</h3>
-            <p>Brief description of your role and key contributions.</p>
+            <h3>Research Data Analyst</h3>
+            <p class="timeline-organization"><a href="https://mdm-inc.com/">Medical Decision Modeling Inc.</a></p>
+            <span class="timeline-date"><time datetime="2022-08">Aug 2022</time> – <time datetime="2024-07">Jul 2024</time></span>
           </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-logo timeline-logo-wide">
+            <img class="logo-jj" src="assets/logos/johnson-and-johnson.svg" alt="" width="54" height="46" loading="lazy" />
+          </div>
+          <div class="timeline-body">
+            <h3>Finance Intern</h3>
+            <p class="timeline-organization"><a href="https://www.jnj.com/">Johnson and Johnson Medical Taiwan Ltd.</a></p>
+            <span class="timeline-date"><time datetime="2020-07">Jul 2020</time> – <time datetime="2020-09">Sep 2020</time></span>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ── Coffee ── -->
+    <section class="container" id="coffee">
+      <p class="coffee-eyebrow">Coffee atlas</p>
+      <h2 class="coffee-title">
+        <span>Coffee, brewing.</span>
+      </h2>
+      <p class="coffee-intro">A personal journal of cafés, good cups, and places worth slowing down for.</p>
+      <div class="coffee-toolbar">
+        <p id="coffee-status" class="coffee-status" role="status" aria-live="polite">Choose Coffee to explore the map.</p>
+        <button id="coffee-refresh" class="btn btn-outline" type="button">Refresh cafés</button>
+      </div>
+      <div class="coffee-layout">
+        <div class="coffee-map-column">
+          <div id="coffee-map" class="coffee-map" role="region" aria-label="Interactive vector map of my coffee spots" tabindex="0"></div>
+          <div id="coffee-selection" class="coffee-selection" aria-live="polite" hidden></div>
         </div>
+        <aside class="coffee-sidebar" aria-label="Cafés visited by location">
+          <h3>Cafés I’ve visited</h3>
+          <div id="coffee-list"></div>
+        </aside>
+      </div>
+      <p class="coffee-privacy">Vector maps by MapLibre and OpenFreeMap, with OpenStreetMap data. No Google account or device location needed. Map and CDN providers receive normal loading requests.</p>
+      <noscript><p>Enable JavaScript to explore the map and café journal.</p></noscript>
+    </section>
+
+    <!-- ── For Fun ── -->
+    <section class="container" id="for-fun">
+      <h2>Outside the usual work.</h2>
+      <p class="section-intro">A little time on the court, a lot of sports to watch.</p>
+      <div class="fun-prose">
+        <p>I enjoy playing tennis, pickleball, and badminton. I also love watching all kinds of sports.</p>
+        <h3>Teams I root for <span aria-hidden="true">🕶️</span></h3>
+        <ul class="favorite-teams">
+          <li class="team-name"><img class="inline-team-logo" src="assets/logos/oakland-athletics.png" alt="" width="28" height="28" loading="lazy" /><span>Oakland A’s</span></li>
+          <li class="team-name"><img class="inline-team-logo" src="assets/logos/san-francisco-giants.png" alt="" width="28" height="28" loading="lazy" /><span>San Francisco Giants</span></li>
+          <li class="team-name"><img class="inline-team-logo" src="assets/logos/golden-state-warriors.png" alt="" width="28" height="28" loading="lazy" /><span>Golden State Warriors</span></li>
+          <li class="team-name"><img class="inline-team-logo" src="assets/logos/san-francisco-49ers.png" alt="" width="28" height="28" loading="lazy" /><span>San Francisco 49ers</span></li>
+        </ul>
+        <p class="teams-note">“Basically, if they’re from the Bay Area, I’m probably rooting for them.”</p>
+        <p class="teams-note">In no particular order — I love them all.</p>
+      </div>
+    </section>
+
+    <!-- Blog and Contact are kept for later, but are not active V3 pages. -->
+    <section class="container" id="blog" data-page-disabled="true" hidden>
+      <p class="coffee-eyebrow">Notes &amp; observations</p>
+      <h2>Notes, eventually.</h2>
+      <p class="section-intro">A corner for longer thoughts, not just résumé lines.</p>
+      <div class="blog-placeholder">
+        <p>No posts yet. I’m keeping this space for things I’m learning, building, and thinking about.</p>
+        <span class="margin-note">More to come.</span>
       </div>
     </section>
 
     <!-- ── Contact ── -->
-    <section class="container" id="contact">
-      <h2>Contact</h2>
+    <section class="container" id="contact" data-page-disabled="true" hidden>
+      <h2>Say hello.</h2>
+      <p class="section-intro">The easiest way to reach me is by email.</p>
       <ul class="contact-list">
-        <li><span class="icon">✉️</span><a href="mailto:hello@example.com">hello@example.com</a></li>
-        <li><span class="icon">💼</span><a href="https://linkedin.com/in/yourhandle" target="_blank">linkedin.com/in/yourhandle</a></li>
-        <li><span class="icon">🐙</span><a href="https://github.com/yourhandle" target="_blank">github.com/yourhandle</a></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3Z M3 5l9 8 9-8" fill="none" stroke="currentColor" stroke-width="1.6" /></svg><a class="email-address" href="mailto:chihyutsai@alumni.upenn.edu">chihyutsai AT alumni DOT upenn DOT edu</a></li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-linkedin" /></svg><a href="https://linkedin.com/in/chihyutsai" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-github" /></svg><a href="https://github.com/chihyu-tsai" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
       </ul>
     </section>
   </main>
@@ -417,7 +653,21 @@
   <!-- ── Footer ── -->
   <footer>
     <div class="container">
-      &copy; <span id="year"></span> Chihyu Tsai &middot; Built with HTML, CSS &amp; JS
+      <div class="footer-line">
+        <p>&copy; <span id="year"></span> Chih Yu Tsai <span class="footer-location">/ Philadelphia</span></p>
+        <p class="design-comparison">V3 · current</p>
+      </div>
+      <details class="logo-credits">
+        <summary>Logo sources &amp; usage</summary>
+        <p>Logos identify the institutions listed above; no endorsement is implied. Trademarks belong to their respective owners.</p>
+        <p>Source files from Wikimedia Commons:
+          <a href="https://commons.wikimedia.org/wiki/File:Shield_of_the_University_of_Pennsylvania.svg">Penn shield</a> (listed as public domain in the U.S., published without copyright notice),
+          <a href="https://commons.wikimedia.org/wiki/File:Seal_of_University_of_California,_Berkeley.svg">Berkeley seal</a> (public-domain dedication), and
+          <a href="https://commons.wikimedia.org/wiki/File:Johnson_and_Johnson_Logo.svg">historical J&amp;J wordmark</a> (public-domain text logo; used during the 2020 internship).
+          Commons source files remain unmodified. Copyright status does not remove trademark or insignia restrictions, and rules may vary by jurisdiction. The Penn shield also identifies the university affiliation of the Wharton role. The Medical Decision Modeling logo was supplied by the site owner; V3 removes its white backing and uses light lettering at night. These display variants are not official alternate logos and are not covered by the Commons public-domain statements above.
+        </p>
+        <p>Team logos identify personal favorites, not endorsements. Sources: <a href="https://a.espncdn.com/i/teamlogos/mlb/500/oak.png">Oakland A’s</a>, <a href="https://a.espncdn.com/i/teamlogos/mlb/500/sf.png">San Francisco Giants</a>, <a href="https://a.espncdn.com/i/teamlogos/nba/500/gs.png">Golden State Warriors</a>, and <a href="https://a.espncdn.com/i/teamlogos/nfl/500/sf.png">San Francisco 49ers</a> via ESPN. Team marks remain the property of their respective owners; these are not covered by the public-domain statements above.</p>
+      </details>
     </div>
   </footer>
 
@@ -425,10 +675,12 @@
     // ── Theme toggle ──
     const html   = document.documentElement;
     const btn    = document.getElementById("theme-toggle");
-    const label  = document.getElementById("theme-label");
 
-    const saved = localStorage.getItem("theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    let saved;
+    try { saved = localStorage.getItem("theme"); } catch { /* Storage can be blocked in local previews. */ }
+    if (saved !== "light" && saved !== "dark") {
+      saved = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
 
     setTheme(saved);
 
@@ -438,12 +690,19 @@
 
     function setTheme(t) {
       html.dataset.theme = t;
-      label.textContent  = t === "dark" ? "Dark" : "Light";
-      localStorage.setItem("theme", t);
+      const action = t === "dark" ? "Switch to light mode" : "Switch to dark mode";
+      btn.setAttribute("aria-label", action);
+      btn.title = action;
+      try { localStorage.setItem("theme", t); } catch { /* Switching still works without persistence. */ }
     }
 
     // ── Footer year ──
     document.getElementById("year").textContent = new Date().getFullYear();
+
   </script>
+  <script src="assets/navigation.js"></script>
+  <script type="module" src="assets/coffee.js"></script>
+  <script type="module" src="assets/journey-map.js"></script>
+  <script type="module" src="assets/i18n.js"></script>
 </body>
 </html>

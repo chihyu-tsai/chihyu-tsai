@@ -1,0 +1,34 @@
+[
+  {
+    "id": "kaohsiung",
+    "label": "Kaohsiung",
+    "region": "Taiwan",
+    "stage": "Born & raised",
+    "coordinates": [120.3014, 22.6273],
+    "description": "Born and raised in Kaohsiung, in southern Taiwan."
+  },
+  {
+    "id": "tainan",
+    "label": "Tainan",
+    "region": "Taiwan",
+    "stage": "High school",
+    "coordinates": [120.227, 22.9999],
+    "description": "I attended National Tainan First Senior High School (台南一中) in Tainan."
+  },
+  {
+    "id": "bay-area",
+    "label": "Bay Area",
+    "region": "California",
+    "stage": "Undergraduate",
+    "coordinates": [-122.2727, 37.8716],
+    "description": "The Bay Area for undergraduate studies: a B.A. in Economics at UC Berkeley."
+  },
+  {
+    "id": "philadelphia",
+    "label": "Philadelphia",
+    "region": "Pennsylvania",
+    "stage": "Graduate school",
+    "coordinates": [-75.1652, 39.9526],
+    "description": "Philadelphia for graduate school: Computer and Information Technology at Penn."
+  }
+]

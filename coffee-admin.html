@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Coffee editor · Chih Yu Tsai</title>
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css" integrity="sha384-gNYNsUmuZqDYiT3gbirWTV5K7rt71RoveS/yXAaU09d4ZUmeDVTD3XoqB6uJAIFR" crossorigin="" />
+  <link rel="stylesheet" href="assets/coffee.css" />
+  <style>
+    :root { color-scheme: light; --bg: #eae7e1; --surface: #f1eee8; --border: #d4cec5; --text: #353330; --muted: #6e6861; --accent: #a83e0e; }
+    * { box-sizing: border-box; }
+    body { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; font: 16px/1.7 system-ui, sans-serif; color: var(--text); background: var(--bg); }
+    a { color: var(--accent); }
+    h1 { margin-bottom: 0.5rem; }
+    label { display: block; margin-top: 1rem; font-weight: 600; }
+    input, textarea, select { display: block; width: 100%; padding: 0.75rem; margin-top: 0.4rem; border: 1px solid var(--border); border-radius: 0.5rem; font: inherit; background: var(--surface); color: var(--text); }
+    [hidden] { display: none !important; }
+    fieldset { border: 0; padding: 0; margin: 0; }
+    .coordinates { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    button, .btn { padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--surface); color: var(--text); cursor: pointer; font: inherit; }
+    button:disabled { opacity: 0.55; cursor: wait; }
+    .actions { display: flex; gap: 1rem; margin: 1.5rem 0; }
+    .notice { padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; }
+    .coffee-map { margin-top: 1rem; height: 320px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <a href="/#coffee">← View public coffee page</a>
+  <h1>Coffee journal editor</h1>
+  <p>Your single place to add café links, confirm map details, and publish to the website.</p>
+  <p class="notice" id="editor-notice">All saved café details and coordinates are public. Your editor key is only sent to this website’s backend and is not stored in the browser.</p>
+  <div id="editor-key-panel">
+  <label for="editor-key">Private editor key</label>
+  <input id="editor-key" type="password" autocomplete="off" placeholder="The COFFEE_ADMIN_TOKEN configured on your server" />
+  <p class="coffee-privacy">This key works like a password: it lets only you edit the journal. The Terminal command copies it to your clipboard; paste it here with ⌘V. Visitors never need it.</p>
+  </div>
+  <p id="editor-status" role="status" aria-live="polite">Loading cafés…</p>
+  <section class="notice" aria-labelledby="import-title">
+    <h2 id="import-title">Start with a Google Maps link</h2>
+    <label for="import-maps">Google Maps place / share link</label><input id="import-maps" type="url" maxlength="4096" placeholder="https://maps.app.goo.gl/… or https://www.google.com/maps/place/…" />
+    <label for="import-website">Café website (optional—leave blank to look it up)</label><input id="import-website" type="url" maxlength="500" placeholder="I’ll try to find this from the map pin" />
+    <p><button id="import-links" type="button">Import café &amp; find website</button></p>
+    <p>Paste the Google Maps place link above. We import its encoded name/pin and try to find a matching website in nearby OpenStreetMap records. We do not scrape Google or the café website. Website coverage varies; review all details before publishing. Short links may need to be opened and copied as full URLs.</p>
+    <p class="coffee-privacy">Website lookup sends the café’s coordinates to the public Overpass service and uses © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> data. Your editor key is never sent there.</p>
+  </section>
+  <h2 id="form-title">Add a café</h2>
+  <p>Click the map to choose coordinates, or enter them below. Drag and zoom to find a place.</p>
+  <div id="editor-map" class="coffee-map" role="region" aria-label="Choose café location; coordinates can also be entered below"></div>
+  <p id="editor-map-error" role="status"></p>
+  <p class="coffee-privacy">Vector maps are provided by OpenFreeMap using OpenStreetMap data. No Google account or device location is used.</p>
+  <form id="cafe-form">
+    <fieldset id="editor-fields">
+      <label for="name">Café name</label><input id="name" name="name" required maxlength="120" />
+      <label for="address">Address / neighborhood</label><input id="address" name="address" maxlength="240" />
+      <label for="country">Country</label><select id="country" name="country" required><option value="">Choose country</option></select>
+      <input id="country-custom" aria-label="Custom country" maxlength="100" placeholder="Enter country" hidden disabled />
+      <label for="state">State / prefecture / region (optional)</label><select id="state" name="state"><option value="">Choose a country first</option></select>
+      <input id="state-custom" aria-label="Custom state or region" maxlength="100" placeholder="Enter state / prefecture / region" hidden disabled />
+      <label for="city">City (optional)</label><select id="city" name="city"><option value="">Choose a region first</option></select>
+      <input id="city-custom" aria-label="Custom city" maxlength="100" placeholder="Enter city" hidden disabled />
+      <p id="location-status" class="coffee-privacy" role="status" aria-live="polite">Loading location choices…</p>
+      <p class="coffee-privacy">Location choices: <a href="https://github.com/dr5hn/countries-states-cities-database">Countries States Cities Database</a> by dr5hn and contributors, <a href="assets/locations/LICENSE.txt">ODbL 1.0</a> (<a href="assets/locations/SOURCE.txt">source details</a>). Not an official USPS address validation service.</p>
+      <div class="coordinates">
+        <label for="lat">Latitude<input id="lat" name="lat" type="number" step="any" min="-90" max="90" required /></label>
+        <label for="lng">Longitude<input id="lng" name="lng" type="number" step="any" min="-180" max="180" required /></label>
+      </div>
+      <label for="notes">Your coffee notes</label><textarea id="notes" name="notes" rows="4" maxlength="1200"></textarea>
+      <label for="url">Café website (optional)</label><input id="url" name="url" type="url" maxlength="500" placeholder="https://…" />
+      <label for="googleMapsUrl">Google Maps link (optional)</label><input id="googleMapsUrl" name="googleMapsUrl" type="url" maxlength="4096" placeholder="https://www.google.com/maps/place/…" />
+      <div class="actions"><button id="publish-cafe" type="submit">Publish café</button><button type="button" id="cancel-edit">Clear / cancel edit</button></div>
+    </fieldset>
+  </form>
+  <h2>Published cafés</h2>
+  <button id="reload" type="button">Refresh entries</button>
+  <ul id="editor-list" class="coffee-list"></ul>
+  <script type="module" src="assets/coffee-admin.js"></script>
+</body>
+</html>

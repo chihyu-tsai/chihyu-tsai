@@ -1,0 +1,10 @@
+Team logos used as small inline identifiers of the site owner's favorite teams.
+Source files downloaded without modification from ESPN's team-logo CDN:
+Golden State Warriors: https://a.espncdn.com/i/teamlogos/nba/500/gs.png
+Oakland A's: https://a.espncdn.com/i/teamlogos/mlb/500/oak.png
+San Francisco Giants: https://a.espncdn.com/i/teamlogos/mlb/500/sf.png
+San Francisco 49ers: https://a.espncdn.com/i/teamlogos/nfl/500/sf.png
+
+These are team marks, not emoji characters or public-domain assets.
+All rights belong to their respective owners. No affiliation or endorsement is implied.
+The Oakland name is retained to reflect the owner's stated favorite team.

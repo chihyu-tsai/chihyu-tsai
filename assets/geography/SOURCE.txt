@@ -1,0 +1,7 @@
+Education journey map: custom Pacific-centered design.
+Base geography: Natural Earth, 1:110m countries, public domain.
+https://www.naturalearthdata.com/about/terms-of-use/
+Source: https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson
+Modifications: projected into simplified SVG paths; Taiwan detail inset; custom city-center markers and illustrative connecting curves.
+Projection generated with D3 7.9.0 (ISC), used at build time only. See D3-LICENSE.txt.
+City centers are approximate, not personal addresses. Curves indicate the order of life stages, not exact travel routes. No high-school institution or dates have been inferred.

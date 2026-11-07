@@ -1,0 +1,6 @@
+Location dropdown data derived from Countries States Cities Database by dr5hn and contributors.
+https://github.com/dr5hn/countries-states-cities-database
+Source revision: 30fcbf267d538f96dafd0e4e451f5e43b2989700
+License: Open Database License (ODbL) 1.0; see LICENSE.txt.
+Modification: retained country/region/city names only, split by country, sorted and deduplicated.
+This is community-maintained reference data, not a USPS or government validation service. Names/administrative levels may vary; custom entry is supported.
